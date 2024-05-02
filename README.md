@@ -2,6 +2,10 @@
 
 ## 02 - CounterApp
 
+- Librerias usadas
+
+[React Native Paper](https://reactnativepaper.com/)
+
 - Comandos usados
 
 ```bash
