@@ -1,11 +1,22 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+
+enum Operator {
+    add,
+    subtract,
+    multiply,
+    divide,
+}
 
 export const useCalculator = () => {
     
     const [number, setNumber] = useState('0');
+    const [prevNumber, setPrevNumber] = useState('0');
+
+    const lastOperation = useRef<Operator>()
 
     const clean = () => {
         setNumber('0');
+        setPrevNumber('0');
     }
 
     const deleteOperation = () => {
@@ -55,16 +66,73 @@ export const useCalculator = () => {
         }
         setNumber(number + numberString);
     }
+
+    const setLastNumber = () => {
+        if(number.endsWith('.')){
+            setPrevNumber(number.slice(0,-1));
+        }else{
+            setPrevNumber(number);
+        }
+        setNumber('0');
+    }
+
+    const divideOperation = () => {
+        setLastNumber();
+        lastOperation.current = Operator.divide;
+    }
     
+    const multiplyOperation = () => {
+        setLastNumber();
+        lastOperation.current = Operator.multiply;
+    }
+
+    const subtractOperation = () => {
+        setLastNumber();
+        lastOperation.current = Operator.subtract;
+    }
+
+    const addOperation = () => {
+        setLastNumber();
+        lastOperation.current = Operator.add;
+    }
     
+
+    const calculateResult = () => {
+        const n1 = Number(number);
+        const n2 = Number(prevNumber);
+
+        switch(lastOperation.current) {
+            case Operator.add:
+                setNumber(`${n1 + n2}`)
+                break;
+            case Operator.subtract:
+                setNumber(`${n2 - n1}`)
+                break;
+            case Operator.multiply:
+                setNumber(`${n1 * n2}`)
+                break;
+            case Operator.divide:
+                setNumber(`${n2 / n1}`)
+                break;
+            default:
+                throw new Error('Operation not implemented');
+        }
+        setPrevNumber('0');
+    }
+
     return {
         // propiedades
         number,
-        
+        prevNumber,
         // metodos
         buildNumber,
         clean,
         deleteOperation,
-        toggleSign
+        toggleSign,
+        divideOperation,
+        multiplyOperation,
+        subtractOperation,
+        addOperation,
+        calculateResult,
     }
 }
