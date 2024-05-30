@@ -14,3 +14,11 @@
     yarn add react-native-vector-icons
     yarn add @types/react-native-vector-icons -D
 ```
+
+## 03 - Calculadora IOS
+
+- Comandos usados
+
+```bash
+    npx react-native init iosCalculator
+```
